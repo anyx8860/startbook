@@ -1,0 +1,43 @@
+Dim per As Double
+
+For Each ws In Worksheets
+    table_row = 2
+    LastRow = ws.Cells(Rows.Count, 1).End(xlUp).Row
+    
+    
+    For i = 2 To LastRow
+        If ws.Cells(i, 1).Value <> ws.Cells(i + 1, 1).Value Then
+            stock_name = ws.Cells(i, 1).Value
+        
+            volume_total = volume_total + ws.Cells(i, 12).Value
+            
+            dif = total_close - total_opem
+            per = dif / total_open
+        
+            ws.Range("I" & table_row).Value = stock_name
+            ws.Range("J" & table_row).Value = dif
+            ws.Range("K" & table_row).Value = per
+            If ws.Range("J" & table_row).Value >= 0 Then
+                ws.Range("J" & table_row).Interior.Color = 5
+            Else
+                ws.Range("J" & table_row).Interior.Color = 3
+            End If
+            
+            ws.Range("L" & table_row).Value = volume_total
+            table_row = table_row + 1
+            volume_total = 0
+            total_open = 0
+            total_close = 0
+            dif = 0
+            per = 0
+        Else
+            total_open = total_open + ws.Cells(i, 3).Value
+            total_close = total_close + ws.Cells(i, 6).Value
+            volume_total = volume_total + ws.Cells(i, 2).Value
+        End If
+    
+    Next i
+ 
+
+Next ws
+End Sub
